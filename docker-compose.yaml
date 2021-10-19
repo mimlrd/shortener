@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  db:
+    image: mongo:4.2
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: "admin"
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+  
+  api:
+    image: milguad/shorten:v0.1.0
+    ports: 
+      - 5050:5050
+    environment:
+      FLASK_ENV : 'development'
+      SECRET_KEY : "5becca1c228e59a1ehbdOpdsebe9e1b5a5dabf56d"
+      MONGOHOST : 'db'
+      MONGOPORT : '27017'
+      MONGOUSER : 'admin'
+      MONGOPASSWORD : 'admin'
+      RESPONSE_FORMAT : 'json' # available options: json or xml
+    depends_on: 
+      - "db"
+
+volumes:
+  mongodb_data_container:
